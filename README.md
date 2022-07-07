@@ -28,9 +28,21 @@ The ctfd.json file is a json-formattet file with meta-description for the challe
 {
   "flag": "CTF{the_actual_flag_here}",
   "title": "The Public Title Displayed in CTFd",
-  "description": "The challenge description goes here."
+  "description": "The challenge description goes here.",
   "downloadable_files": [
      "source.zip"
   ]
 }
 ```
+
+Ideally the challenge also contains a `solve.py` or `solve.sh` or `solve.txt` which either automates extracting the flag, so challenge can be verified. Alternatively for a `.txt` version it just descripes the intended solution. You are more than welcome to have both a automated solver-script as well as a `solve.txt`.
+
+If a challenge is using docker-files, it should contain a file in the root directory called `docker-compose.yml` and it should be compatible with running `docker-compose up`. 
+
+### Sample Challenge
+See the example challenge in this repository, which contains all the above mentioned things.
+
+- Uses docker-compose for setting up both a webserver and a database server
+- ctfd.json with meta-data
+- downloadable source-code (optional)
+- solve.py for automated verification (optional)

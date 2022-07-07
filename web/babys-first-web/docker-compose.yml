@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  db:
+    image: mariadb:10.7
+    restart: always
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+    environment:
+      MARIADB_RANDOM_ROOT_PASSWORD: "yes"
+      MARIADB_DATABASE: userstore
+      MARIADB_USER: secret-user
+      MARIADB_PASSWORD: some-secret-random-string
+  web:
+    build: web
+    restart: always
+    depends_on:
+      - db
+    volumes:
+      - ./flag.txt:/flag.txt
+    ports:
+      - "8123:80"
+    environment:
+      DB_USER: secret-user
+      DB_PASSWORD: some-secret-random-string
