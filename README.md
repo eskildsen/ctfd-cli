@@ -23,7 +23,7 @@ Sample directories for two different challenges:
 /crypto/aes-for-beginners/ctfd.json
 ```
 
-The ctfd.json file is a json-formattet file with meta-description for the challenge. The `downloadable_files` is optional and will take files from the folder and make them available for download. 
+The ctfd.json file is a json-formattet file with meta-description for the challenge. The `downloadable_files` is optional and will take files from the folder and make them available for download. The `unique_server_per_team` is used to flag the challenge as needing special hosting. Thus, every team should have their own separatedly hosted instance of this challenge. It defaults to `false`.
 ```json
 {
   "flag": "CTF{the_actual_flag_here}",
@@ -31,7 +31,8 @@ The ctfd.json file is a json-formattet file with meta-description for the challe
   "description": "The challenge description goes here.",
   "downloadable_files": [
      "source.zip"
-  ]
+  ],
+  "unique_server_per_team": false
 }
 ```
 
