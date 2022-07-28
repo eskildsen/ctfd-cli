@@ -32,9 +32,24 @@ The ctfd.json file is a json-formattet file with meta-description for the challe
   "downloadable_files": [
      "source.zip"
   ],
-  "unique_server_per_team": false
+  "unique_server_per_team": false,
+  "tags": [
+     "crypto",
+     "hard",
+     "virtualization"
+  ]
 }
 ```
+
+Minimal example:
+```json
+{
+  "flag": "CTF{the_actual_flag_here}",
+  "title": "The Public Title Displayed in CTFd",
+  "description": "The challenge description goes here."
+}
+```
+
 
 Ideally the challenge also contains a `solve.py` or `solve.sh` or `solve.txt` which either automates extracting the flag, so challenge can be verified. Alternatively for a `.txt` version it just descripes the intended solution. You are more than welcome to have both a automated solver-script as well as a `solve.txt`.
 
