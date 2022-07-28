@@ -4,5 +4,9 @@
     "description": "We have hidden the flag on the website in some obscure location. Try to see if you can find it! Source code for the challenge is available.",
     "downloadable_files":[
        "source-code-for-download.zip"
+    ],
+    "tags": [
+        "introduction",
+        "easy"
     ]
  }
