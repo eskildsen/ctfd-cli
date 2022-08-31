@@ -32,6 +32,7 @@ The ctfd.json file is a json-formattet file with meta-description for the challe
   "downloadable_files": [
      "source.zip"
   ],
+  "points": 500,
   "unique_server_per_team": false,
   "tags": [
      "crypto",
@@ -40,6 +41,8 @@ The ctfd.json file is a json-formattet file with meta-description for the challe
   ]
 }
 ```
+
+If dynamic scoring is enabled, there is no reason to include the `"points"` attribute, otherwise for fixed scoring include the points property.
 
 Minimal example:
 ```json
