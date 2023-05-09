@@ -4,11 +4,18 @@ import configparser
 import argparse
 from pathlib import Path
 import json
+from codecs import BOM_UTF8
 
 SETTINGS_FILE = os.path.join(os.path.expanduser('~'), ".ctfd_settings")
 
 config = configparser.ConfigParser()
 session = requests.Session()
+
+def lstrip_bom(val, bom=BOM_UTF8):
+    if val.startswith(bom):
+        return val[len(bom):]
+    else:
+        return val
 
 def ensure_config_exists():
     if not os.path.exists(SETTINGS_FILE):
@@ -86,8 +93,8 @@ def get_local_challenges(directory):
                 print(f"File "+ str(filename) + " does not exist. Ignoring for now!")
                 continue
                 
-            with open(filename, "r") as f:
-                info = json.load(f)
+            with open(filename, "rb") as f:
+                info = json.loads(lstrip_bom(f.read()))
                 info["category"] = category
                 info["directory"] = Path(directory, category, dir)
                 challenges.append(info)
