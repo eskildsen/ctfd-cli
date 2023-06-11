@@ -33,6 +33,8 @@ def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("--token", type=str, help="the access token for the API access, e.g. d41d8cd98f00b204e9800998ecf8427e", default=stored_token)
     parser.add_argument("--url", type=str, help="url to the instance, e.g. https://demo.ctfd.io. Without trailing slash", default=stored_url)
+    parser.add_argument("--prompt-each", action="store_true", help="signal to promp and ask for challenge creation for each individual challenge")
+    parser.add_argument("--scoring", type=str, choices=["dynamic", "standard"], help="specify scoring mechanism hereby overwriting individual challenge files")
     parser.add_argument("path", type=str, help="directory to traverse for challenges")
 
     parsed = parser.parse_args()
@@ -105,7 +107,7 @@ def get_ctfd_challenges(url, access_token):
     auth_headers = {"Authorization": f"Token {access_token}"}
     return requests.get(url + "/api/v1/challenges?view=admin", json=True, headers=auth_headers).json()["data"]
 
-def create_challenge(challenge, directory, url, access_token):
+def create_challenge(challenge, directory, url, access_token, scoring = None):
     auth_headers = {"Authorization": f"Token {access_token}"}
 
     data = {
@@ -113,11 +115,20 @@ def create_challenge(challenge, directory, url, access_token):
         "category": challenge["category"],
         "description": challenge["description"],
         "type": challenge.get("type", "dynamic"),
+        "value": challenge.get("points", 0),
         "state": "hidden",
         "initial": 500,
         "decay": 15,
         "minimum": 100,
     }
+
+    if scoring in ["dymamic", "standard"]:
+        data["type"] = scoring
+
+    if data["type"] == "standard":
+        del data["initial"], data["decay"], data["minimum"]
+    elif data["type"] == "dynamic":
+        del data["value"]
 
     if challenge.get("connection_info"):
         data["connection_info"] = challenge.get("connection_info")
@@ -207,4 +218,10 @@ if __name__ == "__main__":
         print("[+] Creating challenges")
         for chal in challenges:
             if chal["title"] not in existing_challenge_names:
-                create_challenge(chal, None, settings.url, settings.token)
+                if not settings.prompt_each:
+                    create_challenge(chal, None, settings.url, settings.token, settings.scoring)
+                    continue
+
+                if input("Import challenge '{}'? (y/N) ".format(chal['title'])).lower() == "y":
+                    create_challenge(chal, None, settings.url, settings.token, settings.scoring)
+                    print("-", chal["title"], "imported")
